@@ -5,235 +5,371 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>XyLo | Roblox Scripter</title>
 <meta name="description" content="XyLo: Roblox scripter with 6+ years of experience in full-stack game systems, core loops, matchmaking, data and monetization.">
+<meta name="theme-color" content="#e5173f">
+<link rel="icon" href="media/fitting-room.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bowlby+One+SC&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b0d12;
-    --bg-2: #11141b;
-    --card: #151924;
-    --line: #232837;
-    --text: #e8ebf2;
-    --muted: #9aa3b5;
-    --accent: #7c5cff;
-    --accent-2: #22d3ee;
-    --good: #34d399;
-    --radius: 14px;
+    --black: #0a0608;
+    --ink: #160b0f;
+    --ink-2: #22121a;
+    --straw: #e5173f;
+    --straw-hot: #ff2f55;
+    --straw-dark: #a50d2c;
+    --pink: #ff8fab;
+    --cream: #fff3f1;
+    --seed: #ffd447;
+    --leaf: #2fbf71;
+    --display: "Anton", Impact, sans-serif;
+    --heavy: "Archivo Black", "Arial Black", sans-serif;
+    --chunky: "Bowlby One SC", "Arial Black", sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
-    background: var(--bg);
-    color: var(--text);
+    background:
+      repeating-linear-gradient(-55deg, transparent 0 46px, rgba(229,23,63,.035) 46px 92px),
+      var(--black);
+    color: var(--cream);
     font-family: Inter, system-ui, sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
   a { color: inherit; text-decoration: none; }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
-  code, .mono { font-family: "JetBrains Mono", monospace; }
+  button { font: inherit; }
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+  ::selection { background: var(--straw); color: #fff; }
 
-  /* Nav */
+  /* ---------- Cut-out "ransom" lettering ---------- */
+  .ransom { display: inline-flex; flex-wrap: wrap; align-items: center; gap: .04em; line-height: 1; }
+  .ransom .ch { display: inline-block; padding: .06em .1em .02em; text-transform: uppercase; }
+  .ransom { column-gap: .3em; row-gap: .12em; }
+  .ransom .word { display: inline-flex; gap: .04em; white-space: nowrap; }
+  .ch.v0 { background: #fff; color: var(--black); font-family: var(--heavy); transform: rotate(-4deg); }
+  .ch.v1 { background: var(--black); color: #fff; font-family: var(--display); transform: rotate(3deg) scale(1.08); outline: 2px solid #fff; outline-offset: -2px; }
+  .ch.v2 { background: var(--straw); color: #fff; font-family: var(--chunky); transform: rotate(-2deg); }
+  .ch.v3 { background: transparent; color: #fff; font-family: var(--display); transform: rotate(5deg) scale(1.15); }
+  .ch.v4 { background: #fff; color: var(--straw); font-family: var(--display); transform: rotate(2deg) scale(.95); }
+  .ch.v5 { background: var(--black); color: var(--straw-hot); font-family: var(--heavy); transform: rotate(-6deg); outline: 2px solid var(--straw); outline-offset: -2px; }
+  .on-red .ch.v2 { background: var(--black); }
+  .on-light .ch.v3 { color: var(--black); }
+
+  /* ---------- Nav ---------- */
   nav {
-    position: sticky; top: 0; z-index: 10;
-    background: rgba(11,13,18,.82); backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 50;
+    background: var(--black);
+    border-bottom: 4px solid var(--straw);
   }
-  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-  .logo { font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; }
-  .logo span { color: var(--accent); }
-  nav ul { display: flex; gap: 22px; list-style: none; font-size: .92rem; color: var(--muted); }
-  nav ul a:hover { color: var(--text); }
-  @media (max-width: 640px) { nav ul { display: none; } }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font-size: 1.35rem; }
+  nav ul { display: flex; gap: 6px; list-style: none; }
+  nav ul a {
+    display: block; padding: 6px 16px; font-family: var(--display); font-size: 1.05rem; letter-spacing: .06em;
+    text-transform: uppercase; transform: skewX(-14deg); transition: .15s;
+  }
+  nav ul a span { display: block; transform: skewX(14deg); }
+  nav ul a:hover { background: var(--straw); color: #fff; transform: skewX(-14deg) translateY(-2px); box-shadow: 4px 4px 0 #fff; }
+  @media (max-width: 680px) { nav ul { display: none; } }
 
-  /* Hero */
-  .hero { padding: 96px 0 72px; position: relative; overflow: hidden; }
-  .hero::before {
-    content: ""; position: absolute; inset: -40% -10% auto auto; width: 620px; height: 620px;
-    background: radial-gradient(circle, rgba(124,92,255,.28), transparent 65%);
-    pointer-events: none;
+  /* ---------- Hero ---------- */
+  .hero { position: relative; padding: 90px 0 110px; overflow: hidden; isolation: isolate; }
+  .hero::before { /* giant red slash */
+    content: ""; position: absolute; z-index: -2; inset: -10% -20% auto 38%; height: 130%;
+    background: var(--straw); transform: skewX(-18deg);
+    box-shadow: -18px 0 0 var(--black), -30px 0 0 #fff;
   }
-  .badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: .82rem; color: var(--good);
-    border: 1px solid rgba(52,211,153,.35); background: rgba(52,211,153,.08);
-    padding: 6px 12px; border-radius: 999px; margin-bottom: 22px;
+  .hero::after { /* halftone */
+    content: ""; position: absolute; z-index: -1; inset: 0 0 0 45%;
+    background-image: radial-gradient(rgba(10,6,8,.38) 2.2px, transparent 2.6px);
+    background-size: 14px 14px;
+    -webkit-mask-image: linear-gradient(115deg, transparent 20%, #000 75%); mask-image: linear-gradient(115deg, transparent 20%, #000 75%);
   }
-  .badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
-  h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.05; letter-spacing: -.035em; font-weight: 800; }
-  h1 .grad { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .lead { color: var(--muted); font-size: 1.15rem; max-width: 620px; margin: 20px 0 32px; }
-  .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero-grid { display: grid; grid-template-columns: 1.25fr .9fr; gap: 40px; align-items: center; }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .hero::before { inset: auto -40% -20% 20%; height: 55%; } .hero::after { inset: 50% 0 0 0; } }
+  .tagline {
+    display: inline-block; background: #fff; color: var(--black); font-family: var(--heavy); font-size: .82rem;
+    letter-spacing: .08em; text-transform: uppercase; padding: 6px 14px; transform: rotate(-2deg); margin-bottom: 26px;
+    box-shadow: 5px 5px 0 var(--straw);
+  }
+  .tagline b { color: var(--straw); }
+  h1 { font-size: clamp(3rem, 9vw, 6.4rem); margin-bottom: 14px; }
+  .role-line {
+    font-family: var(--display); font-size: clamp(1.3rem, 3.2vw, 2rem); letter-spacing: .03em; text-transform: uppercase;
+    display: inline-block; background: var(--black); padding: 4px 16px; transform: skewX(-10deg); border-left: 8px solid var(--straw);
+  }
+  .lead {
+    color: #e9d6d9; font-size: 1.05rem; max-width: 540px; margin: 22px 0 34px; position: relative;
+    background: var(--black); padding: 16px 20px; border: 3px solid #fff; box-shadow: 8px 8px 0 var(--straw);
+  }
+  .btns { display: flex; flex-wrap: wrap; gap: 14px; }
   .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: .95rem;
-    border: 1px solid var(--line); background: var(--card); transition: .15s;
+    display: inline-flex; align-items: center; gap: 10px; cursor: pointer; border: 0;
+    padding: 13px 26px; font-family: var(--display); font-size: 1.1rem; letter-spacing: .06em; text-transform: uppercase;
+    background: #fff; color: var(--black); clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%);
+    transition: transform .15s, background .15s, color .15s;
   }
-  .btn:hover { border-color: var(--accent); }
-  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .btn.primary:hover { filter: brightness(1.1); }
-  .stats { display: flex; flex-wrap: wrap; gap: 36px; margin-top: 56px; }
-  .stat b { display: block; font-size: 1.8rem; font-weight: 800; }
-  .stat span { color: var(--muted); font-size: .88rem; }
+  .btn:hover { transform: translate(-2px, -3px) rotate(-1deg); background: var(--black); color: #fff; }
+  .btn.red { background: var(--straw); color: #fff; }
+  .btn.red:hover { background: #fff; color: var(--straw); }
+  .btn.dark { background: var(--black); color: #fff; }
+  .btn.dark:hover { background: #fff; color: var(--black); }
 
-  /* Sections */
-  section { padding: 72px 0; border-top: 1px solid var(--line); }
-  .eyebrow { font-family: "JetBrains Mono", monospace; color: var(--accent-2); font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; }
-  h2 { font-size: clamp(1.8rem, 4vw, 2.4rem); letter-spacing: -.03em; margin: 8px 0 14px; }
-  .sub { color: var(--muted); max-width: 640px; margin-bottom: 36px; }
+  /* stat card */
+  .stat-card {
+    background: var(--black); border: 4px solid #fff; padding: 26px 26px 20px; transform: rotate(3deg);
+    box-shadow: 14px 14px 0 var(--black), 14px 14px 0 4px #fff;
+    position: relative;
+  }
+  .stat-card::before {
+    content: "STATUS"; position: absolute; top: -18px; left: 18px; background: var(--straw); color: #fff;
+    font-family: var(--display); letter-spacing: .14em; padding: 2px 14px; transform: rotate(-4deg); border: 3px solid #fff;
+  }
+  .stat { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 10px 0; border-bottom: 2px dashed rgba(255,255,255,.18); }
+  .stat:last-child { border: 0; }
+  .stat span { font-family: var(--heavy); font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--pink); }
+  .stat b { font-family: var(--display); font-size: 2.1rem; line-height: 1; font-weight: 400; }
+  .stat b em { font-style: normal; color: var(--straw-hot); }
+  .online { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-family: var(--heavy); font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
+  .online::before { content: ""; width: 10px; height: 10px; background: var(--leaf); border-radius: 50%; box-shadow: 0 0 0 3px rgba(47,191,113,.3); animation: pulse 1.6s infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 7px rgba(47,191,113,0); } }
 
-  /* Principles */
-  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
-  .card h3 { font-size: 1.02rem; margin-bottom: 6px; }
-  .card p { color: var(--muted); font-size: .93rem; }
-  .icon { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 14px; background: rgba(124,92,255,.14); color: var(--accent); font-family: "JetBrains Mono", monospace; font-weight: 600; }
+  /* ---------- Section heads ---------- */
+  section { padding: 90px 0; position: relative; }
+  .sec-head { display: flex; align-items: center; gap: 18px; margin-bottom: 18px; flex-wrap: wrap; }
+  .sec-num {
+    font-family: var(--display); font-size: 1.1rem; background: var(--straw); color: #fff; padding: 4px 14px;
+    clip-path: polygon(0 0, 100% 10%, 92% 100%, 4% 88%);
+  }
+  h2 { font-size: clamp(2.2rem, 6vw, 3.6rem); }
+  .sub { color: #d9c3c7; max-width: 640px; margin-bottom: 44px; font-size: 1.02rem; }
+  .divider { height: 26px; background: repeating-linear-gradient(-45deg, var(--straw) 0 14px, var(--black) 14px 28px); border-block: 3px solid #fff; }
 
-  /* Projects */
-  .project { display: grid; grid-template-columns: 1.05fr 1fr; gap: 32px; align-items: start; margin-bottom: 64px; }
+  /* ---------- Principles ---------- */
+  .principles { display: grid; gap: 26px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .pcard {
+    background: var(--cream); color: var(--black); padding: 34px 24px 26px; position: relative;
+    clip-path: polygon(0 4%, 100% 0, 97% 100%, 2% 96%); transition: transform .2s;
+  }
+  .pcard:nth-child(even) { transform: rotate(1.5deg); }
+  .pcard:nth-child(odd) { transform: rotate(-1.5deg); }
+  .pcard:hover { transform: rotate(0) scale(1.03); }
+  .pcard .n { position: absolute; top: 10px; right: 16px; font-family: var(--display); font-size: 3.4rem; line-height: 1; color: var(--straw); opacity: .9; }
+  .pcard h3 { font-family: var(--display); font-size: 1.7rem; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; margin-bottom: 10px; padding-right: 64px; }
+  .pcard p { font-size: .93rem; color: #3a2a2e; }
+
+  /* ---------- Projects ---------- */
+  .project { display: grid; grid-template-columns: 1.1fr 1fr; gap: 44px; align-items: start; margin-bottom: 110px; }
   .project:last-child { margin-bottom: 0; }
-  .project.flip > .media, .project.flip > .media-col { order: 2; }
-  @media (max-width: 860px) { .project { grid-template-columns: 1fr; } .project.flip > .media, .project.flip > .media-col { order: 0; } }
-  .media {
-    aspect-ratio: 16/9; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; position: relative;
-    display: grid; place-items: center; text-align: center;
-  }
-  .media img, .media video { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-  .media .ph { color: rgba(255,255,255,.85); font-weight: 800; font-size: 1.6rem; letter-spacing: -.02em; padding: 20px; }
-  .media .ph small { display: block; font-weight: 500; font-size: .8rem; opacity: .7; margin-top: 6px; font-family: "JetBrains Mono", monospace; }
-  .m-rogue { background: linear-gradient(135deg, #3b1d6e, #7c2d4a 55%, #c2410c); }
-  .m-cow { background: linear-gradient(135deg, #14532d, #15803d 50%, #ca8a04); }
-  .m-plugin { background: linear-gradient(135deg, #0c4a6e, #1d4ed8 60%, #7c3aed); }
-  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
-  .tag { font-size: .78rem; padding: 4px 10px; border-radius: 999px; background: var(--bg-2); border: 1px solid var(--line); color: var(--muted); }
-  .project h3 { font-size: 1.6rem; letter-spacing: -.02em; }
-  .role { color: var(--accent-2); font-size: .88rem; font-weight: 600; }
-  .project > div > p { color: var(--muted); margin-bottom: 16px; }
-  details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; margin-bottom: 10px; }
-  summary { cursor: pointer; padding: 12px 16px; font-weight: 600; font-size: .94rem; list-style: none; display: flex; justify-content: space-between; }
-  summary::-webkit-details-marker { display: none; }
-  summary::after { content: "+"; color: var(--muted); }
-  details[open] summary::after { content: "–"; }
-  details ul { padding: 0 16px 14px 32px; color: var(--muted); font-size: .9rem; }
-  details li { margin: 4px 0; }
-  /* YouTube players */
-  .media[data-yt] { cursor: pointer; background: #000; }
-  .media[data-yt] .thumb { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: .2s; }
-  .media[data-yt]:hover .thumb { filter: brightness(.8); }
+  .project.flip > .media-col { order: 2; }
+  @media (max-width: 900px) { .project { grid-template-columns: 1fr; gap: 28px; } .project.flip > .media-col { order: 0; } }
+  .media-col { display: flex; flex-direction: column; gap: 14px; }
+  .frame { position: relative; padding: 10px; background: #fff; transform: rotate(-1.5deg); box-shadow: 14px 14px 0 var(--straw); }
+  .project.flip .frame { transform: rotate(1.5deg); box-shadow: -14px 14px 0 var(--straw); }
+  .media { aspect-ratio: 16/9; overflow: hidden; position: relative; background: var(--black); display: grid; place-items: center; }
+  .media[data-yt] { cursor: pointer; }
+  .media .thumb { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: .25s; }
+  .media[data-yt]:hover .thumb { transform: scale(1.04); filter: saturate(1.2) brightness(.85); }
   .media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
   .play {
-    position: relative; width: 68px; height: 48px; border-radius: 12px; background: rgba(0,0,0,.7);
-    display: grid; place-items: center; transition: .2s; border: 1px solid rgba(255,255,255,.15);
+    position: relative; width: 84px; height: 84px; background: var(--straw); border: 4px solid #fff;
+    clip-path: polygon(50% 0, 61% 30%, 98% 24%, 70% 50%, 98% 78%, 60% 70%, 50% 100%, 40% 70%, 2% 78%, 30% 50%, 2% 24%, 39% 30%);
+    transition: .2s;
   }
-  .play::after { content: ""; border-style: solid; border-width: 10px 0 10px 17px; border-color: transparent transparent transparent #fff; margin-left: 4px; }
-  .media[data-yt]:hover .play { background: var(--accent); }
-  .now { position: absolute; left: 12px; bottom: 12px; font-size: .8rem; font-weight: 600; background: rgba(0,0,0,.72); padding: 4px 10px; border-radius: 6px; }
-  .media-col { display: flex; flex-direction: column; gap: 12px; }
-  .clips-label { font-size: .8rem; color: var(--muted); font-family: "JetBrains Mono", monospace; }
-  .clips { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .play-wrap { position: relative; filter: drop-shadow(4px 4px 0 var(--black)); transition: .2s; }
+  .play-wrap::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-35%, -50%); border-style: solid; border-width: 12px 0 12px 20px; border-color: transparent transparent transparent #fff; }
+  .media[data-yt]:hover .play-wrap { transform: rotate(20deg) scale(1.12); }
+  .now {
+    position: absolute; left: 10px; bottom: 10px; font-family: var(--display); letter-spacing: .05em; text-transform: uppercase;
+    background: var(--black); color: #fff; padding: 3px 12px; border-left: 5px solid var(--straw); font-size: .95rem; transform: skewX(-8deg);
+  }
+  .clips-label { font-family: var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--pink); margin-top: 16px; }
+  .clips { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; }
   .clip {
-    background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
-    cursor: pointer; text-align: left; color: var(--text); font: inherit; padding: 0; transition: .15s;
+    background: var(--ink-2); color: var(--cream); border: 0; cursor: pointer; text-align: left; padding: 0; position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 92% 100%, 0 100%); transition: .15s;
   }
-  .clip:hover, .clip.active { border-color: var(--accent); }
-  .clip img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
-  .clip span { display: block; padding: 7px 9px; font-size: .78rem; line-height: 1.3; }
+  .clip img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; filter: grayscale(.4); transition: .15s; }
+  .clip span { display: block; padding: 7px 10px 9px; font-size: .76rem; font-weight: 700; line-height: 1.25; text-transform: uppercase; letter-spacing: .02em; }
+  .clip:hover, .clip.active { background: var(--straw); transform: translateY(-3px); }
+  .clip:hover img, .clip.active img { filter: none; }
 
-  .link { display: inline-flex; gap: 6px; margin-top: 8px; color: var(--accent); font-weight: 600; font-size: .94rem; }
-  .link:hover { text-decoration: underline; }
+  .info-panel {
+    background: var(--cream); color: var(--black); padding: 30px 28px 28px; position: relative;
+    clip-path: polygon(0 1.5%, 100% 0, 98.5% 100%, 1% 98.5%);
+  }
+  .info-panel .tagbar { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 16px; }
+  .tag { font-family: var(--heavy); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; padding: 3px 10px; background: var(--black); color: #fff; transform: skewX(-10deg); }
+  .tag:nth-child(3n+2) { background: var(--straw); }
+  .kicker {
+    display: inline-block; font-family: var(--heavy); font-size: .74rem; letter-spacing: .08em; text-transform: uppercase;
+    background: var(--straw); color: #fff; padding: 4px 12px; transform: rotate(-2deg); margin-bottom: 12px;
+  }
+  .info-panel h3 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+  .info-panel > p { color: #3a2a2e; margin-bottom: 18px; }
+  details { border-top: 3px solid var(--black); }
+  details:last-of-type { border-bottom: 3px solid var(--black); }
+  summary {
+    cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--display); font-size: 1.25rem; text-transform: uppercase; letter-spacing: .04em; padding: 10px 4px;
+    transition: .15s;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-family: var(--display); font-size: 1.6rem; color: var(--straw); transition: .2s; }
+  details[open] summary::after { transform: rotate(45deg); }
+  summary:hover { color: var(--straw); padding-left: 10px; }
+  details ul { list-style: none; padding: 2px 4px 16px; font-size: .9rem; color: #3a2a2e; }
+  details li { padding: 4px 0 4px 22px; position: relative; }
+  details li::before { content: ""; position: absolute; left: 2px; top: 11px; width: 10px; height: 10px; background: var(--straw); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  .play-link {
+    display: inline-flex; margin-top: 20px; font-family: var(--display); font-size: 1.15rem; letter-spacing: .06em; text-transform: uppercase;
+    background: var(--black); color: #fff; padding: 9px 22px; clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%); transition: .15s;
+  }
+  .play-link:hover { background: var(--straw); transform: translateX(4px); }
 
-  /* Skills */
-  .skill { display: flex; gap: 14px; }
-  .skill .icon { flex: none; margin: 0; }
+  /* plugin art */
+  .plugin-art {
+    background:
+      radial-gradient(rgba(255,255,255,.22) 2px, transparent 2.5px) 0 0 / 16px 16px,
+      linear-gradient(135deg, var(--straw-dark), var(--straw) 50%, var(--pink));
+  }
+  .plugin-art::before { content: ""; position: absolute; width: 130%; height: 46%; background: var(--black); transform: rotate(-14deg); top: 58%; }
+  .plugin-art img { position: relative; width: 44%; transform: rotate(-6deg); filter: drop-shadow(10px 10px 0 var(--black)); transition: .3s; }
+  .frame:hover .plugin-art img { transform: rotate(4deg) scale(1.05); }
+  .plugin-art .now { z-index: 1; }
+  .free-badge {
+    position: absolute; top: 14px; right: 14px; z-index: 1; font-family: var(--display); font-size: 1.2rem; letter-spacing: .06em;
+    background: var(--seed); color: var(--black); padding: 4px 14px; transform: rotate(8deg); border: 3px solid var(--black);
+  }
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 4px; }
+  @media (max-width: 520px) { .feature-grid { grid-template-columns: 1fr; } }
+  .feature { background: var(--black); color: #fff; padding: 12px 14px; font-size: .86rem; line-height: 1.4; clip-path: polygon(0 0, 100% 0, 97% 100%, 0 100%); }
+  .feature b { display: block; font-family: var(--display); font-weight: 400; font-size: 1.05rem; letter-spacing: .04em; text-transform: uppercase; color: var(--straw-hot); }
 
-  /* Info */
-  .info { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-  .info .card ul { list-style: none; color: var(--muted); font-size: .94rem; }
-  .info .card li { padding: 8px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; }
-  .info .card li:last-child { border: 0; }
-  .info .card li b { color: var(--text); font-weight: 600; text-align: right; }
+  /* ---------- Skills: command menu ---------- */
+  .skills-wrap { display: grid; grid-template-columns: .9fr 1.1fr; gap: 40px; align-items: start; }
+  @media (max-width: 900px) { .skills-wrap { grid-template-columns: 1fr; } }
+  .command { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .cmd {
+    display: flex; align-items: center; gap: 14px; cursor: pointer; padding: 10px 18px; width: fit-content; min-width: 70%;
+    background: var(--black); border: 3px solid #fff; transform: skewX(-12deg); transition: .18s; user-select: none;
+  }
+  .cmd:nth-child(odd) { margin-left: 18px; }
+  .cmd > * { transform: skewX(12deg); }
+  .cmd .k { font-family: var(--display); color: var(--straw); font-size: 1.1rem; }
+  .cmd .t { font-family: var(--display); font-size: clamp(1.25rem, 2.8vw, 1.7rem); text-transform: uppercase; letter-spacing: .03em; line-height: 1.1; }
+  .cmd:hover, .cmd.active { background: var(--straw); transform: skewX(-12deg) translateX(18px); box-shadow: -8px 6px 0 #fff; }
+  .cmd:hover .k, .cmd.active .k { color: #fff; }
+  .skill-detail {
+    position: sticky; top: 110px; background: var(--straw); color: #fff; padding: 36px 32px; min-height: 260px;
+    clip-path: polygon(0 6%, 100% 0, 96% 100%, 3% 92%);
+  }
+  .skill-detail::after { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(10,6,8,.25) 2px, transparent 2.5px); background-size: 12px 12px; -webkit-mask-image: linear-gradient(200deg, #000, transparent 60%); mask-image: linear-gradient(200deg, #000, transparent 60%); pointer-events: none; }
+  .skill-detail .label { font-family: var(--heavy); font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; background: var(--black); display: inline-block; padding: 3px 12px; margin-bottom: 16px; }
+  .skill-detail h3 { font-family: var(--display); font-size: clamp(2rem, 4.5vw, 3rem); text-transform: uppercase; line-height: 1; margin-bottom: 14px; }
+  .skill-detail p { font-size: 1.05rem; max-width: 460px; position: relative; z-index: 1; }
+  @media (max-width: 900px) { .skill-detail { position: relative; top: 0; order: -1; } }
 
-  /* Contact */
-  .contact { text-align: center; }
-  .contact .sub { margin: 0 auto 28px; }
-  .contact .btns { justify-content: center; }
-  .copy-note { color: var(--good); font-size: .85rem; height: 1.2em; margin-top: 12px; }
-  footer { border-top: 1px solid var(--line); padding: 28px 0; color: var(--muted); font-size: .85rem; text-align: center; }
+  /* ---------- Hire ---------- */
+  .hire-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 34px; }
+  .hire-card { background: var(--black); border: 4px solid #fff; padding: 30px 28px 22px; position: relative; }
+  .hire-card:first-child { transform: rotate(-1.2deg); box-shadow: 10px 10px 0 var(--straw); }
+  .hire-card:last-child { transform: rotate(1.2deg); box-shadow: -10px 10px 0 var(--straw); }
+  .hire-card h3 { position: absolute; top: -22px; left: 20px; font-family: var(--display); font-size: 1.5rem; text-transform: uppercase; letter-spacing: .06em; background: #fff; color: var(--black); padding: 0 16px; transform: rotate(-3deg); }
+  .hire-card ul { list-style: none; }
+  .hire-card li { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 2px dashed rgba(255,255,255,.18); font-size: .95rem; }
+  .hire-card li:last-child { border: 0; }
+  .hire-card li span { font-family: var(--heavy); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--pink); padding-top: 3px; }
+  .hire-card li b { text-align: right; }
+
+  /* ---------- Contact ---------- */
+  .contact { background: var(--straw); overflow: hidden; isolation: isolate; text-align: center; padding: 110px 0; }
+  .contact::before { content: ""; position: absolute; inset: 0; z-index: -1; background: conic-gradient(from 0deg at 50% 60%, rgba(10,6,8,.18) 0 10deg, transparent 10deg 20deg); background-size: 100% 100%; }
+  .contact::after { content: ""; position: absolute; left: -5%; right: -5%; bottom: -40px; height: 90px; background: var(--black); transform: rotate(-2.5deg); z-index: -1; }
+  .card-call {
+    display: inline-block; background: var(--black); color: #fff; padding: 40px 36px 34px; max-width: 760px; width: 100%;
+    transform: rotate(-2deg); border: 4px solid #fff; box-shadow: 16px 16px 0 rgba(10,6,8,.55);
+  }
+  .card-call h2 { font-size: clamp(2.2rem, 7vw, 4rem); justify-content: center; margin-bottom: 14px; }
+  .card-call p { color: #e9d6d9; margin: 0 auto 28px; max-width: 520px; }
+  .card-call .btns { justify-content: center; }
+  .copy-note { font-family: var(--display); letter-spacing: .08em; color: var(--seed); height: 1.4em; margin-top: 14px; text-transform: uppercase; }
+  footer { padding: 34px 0; text-align: center; font-family: var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--pink); font-size: .95rem; }
+  footer b { color: var(--straw); font-weight: 400; }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .6s, transform .6s; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+    .reveal { opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+  }
 </style>
 </head>
 <body>
 
 <nav>
   <div class="wrap">
-    <a href="#" class="logo">XyLo<span>.</span></a>
+    <a href="#" class="logo"><span class="ransom" data-ransom>XyLo</span></a>
     <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#hire">Hire</a></li>
+      <li><a href="#about"><span>How I work</span></a></li>
+      <li><a href="#work"><span>Work</span></a></li>
+      <li><a href="#skills"><span>Skills</span></a></li>
+      <li><a href="#hire"><span>Hire</span></a></li>
     </ul>
   </div>
 </nav>
 
 <header class="hero">
-  <div class="wrap">
-    <div class="badge">Open for commissions &amp; long-term work</div>
-    <h1>Roblox Scripter.<br><span class="grad">Full-stack game systems.</span></h1>
-    <p class="lead">I'm XyLo. I have 6+ years of programming experience and I specialize in game systems and core loops. Give me finished UI, maps and models, and I'll turn them into a working game.</p>
-    <div class="btns">
-      <a href="#work" class="btn primary">See my work</a>
-      <a href="#contact" class="btn">Contact me</a>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="tagline">Open for <b>commissions</b> &amp; long-term work</div>
+      <h1><span class="ransom" data-ransom>XyLo</span></h1>
+      <div class="role-line">Roblox Scripter · Full-stack game systems</div>
+      <p class="lead">I have 6+ years of programming experience and I specialize in game systems and core loops. Give me finished UI, maps and models, and I'll turn them into a working game.</p>
+      <div class="btns">
+        <a href="#work" class="btn red">See my work</a>
+        <a href="#contact" class="btn">Contact me</a>
+      </div>
     </div>
-    <div class="stats">
-      <div class="stat"><b>6+ yrs</b><span>Programming experience</span></div>
-      <div class="stat"><b>2</b><span>Full games scripted end to end</span></div>
-      <div class="stat"><b>12 h/day</b><span>Availability (GMT+8)</span></div>
-    </div>
+    <aside class="stat-card reveal" aria-label="Quick stats">
+      <div class="stat"><span>Experience</span><b>6<em>+</em> YRS</b></div>
+      <div class="stat"><span>Full games shipped</span><b>2</b></div>
+      <div class="stat"><span>Studio plugins</span><b>1</b></div>
+      <div class="stat"><span>Availability</span><b>12<em>H</em>/DAY</b></div>
+      <div class="online">Online · GMT+8</div>
+    </aside>
   </div>
 </header>
 
+<div class="divider" aria-hidden="true"></div>
+
 <section id="about">
   <div class="wrap">
-    <div class="eyebrow">// how I work</div>
-    <h2>Built to be secure, scalable and balanced</h2>
+    <div class="sec-head"><span class="sec-num">01</span><h2><span class="ransom" data-ransom>How I work</span></h2></div>
     <p class="sub">I write every system to these four rules, so your game stays hard to exploit, easy to expand and fair to play.</p>
-    <div class="grid">
-      <div class="card">
-        <div class="icon">S</div>
-        <h3>Server-authoritative</h3>
-        <p>The client asks and the server checks. Placement, upgrades, chests, rewards and saving never trust the client.</p>
-      </div>
-      <div class="card">
-        <div class="icon">D</div>
-        <h3>Data-driven</h3>
-        <p>Towers, weapons, enemies, chests and accessories live in shared data modules. Adding content doesn't mean rewriting code.</p>
-      </div>
-      <div class="card">
-        <div class="icon">M</div>
-        <h3>Structured</h3>
-        <p>One module per job, shared modules identical across lobby and game, and comments that explain <em>why</em>.</p>
-      </div>
-      <div class="card">
-        <div class="icon">∑</div>
-        <h3>Balanced with math</h3>
-        <p>Formula-based models connect DPS to power to price, and set enemy HP per wave.</p>
-      </div>
+    <div class="principles">
+      <div class="pcard reveal"><span class="n">01</span><h3>Server-authoritative</h3><p>The client asks and the server checks. Placement, upgrades, chests, rewards and saving never trust the client.</p></div>
+      <div class="pcard reveal"><span class="n">02</span><h3>Data-driven</h3><p>Towers, weapons, enemies, chests and accessories live in shared data modules. Adding content doesn't mean rewriting code.</p></div>
+      <div class="pcard reveal"><span class="n">03</span><h3>Structured</h3><p>One module per job, shared modules identical across lobby and game, and comments that explain <em>why</em>.</p></div>
+      <div class="pcard reveal"><span class="n">04</span><h3>Balanced with math</h3><p>Formula-based models connect DPS to power to price, and set enemy HP per wave.</p></div>
     </div>
   </div>
 </section>
 
 <section id="work">
   <div class="wrap">
-    <div class="eyebrow">// showcase</div>
-    <h2>Selected work</h2>
-    <p class="sub">Complete games and tools, from server architecture to the last UI tween.</p>
+    <div class="sec-head"><span class="sec-num">02</span><h2><span class="ransom" data-ransom>Selected work</span></h2></div>
+    <p class="sub">Complete games and tools, from server architecture to the last UI tween. Click any video to play it here.</p>
 
     <!-- ROGUE DEFENSE -->
-    <article class="project">
+    <article class="project reveal">
       <div class="media-col">
-        <div class="media" id="player-rogue" data-yt="SVGpns3lulk" data-title="Rogue Defense: overview"></div>
-        <div class="clips-label">Feature clips</div>
+        <div class="frame"><div class="media" id="player-rogue" data-yt="SVGpns3lulk" data-title="Rogue Defense · overview"></div></div>
+        <div class="clips-label">Feature clips ▸</div>
         <div class="clips" data-player="player-rogue">
           <button class="clip" data-yt="SVGpns3lulk"><span>Overview</span></button>
           <button class="clip" data-yt="xejq56rgScY"><span>Enemy spawning &amp; waves</span></button>
@@ -244,10 +380,10 @@
           <button class="clip" data-yt="O0OpoYod_vA"><span>Interactive lobby</span></button>
         </div>
       </div>
-      <div>
-        <div class="role">Scripted end to end: lobby + match place</div>
-        <h3>Rogue Defense</h3>
-        <div class="tags"><span class="tag">Tower Defense</span><span class="tag">Roguelite</span><span class="tag">Loot System</span><span class="tag">Multi-place</span></div>
+      <div class="info-panel on-light">
+        <div class="kicker">Scripted end to end · lobby + match place</div>
+        <h3><span class="ransom" data-ransom>Rogue Defense</span></h3>
+        <div class="tagbar"><span class="tag">Tower Defense</span><span class="tag">Roguelite</span><span class="tag">Loot System</span><span class="tag">Multi-place</span></div>
         <p>Deploy characters, equip weapons from your inventory and survive 50 waves across biomes. Bosses use abilities, elements react with each other, and you pick power-up cards between waves. Weapons drop from chests with rarities, levels and random modifiers.</p>
         <details>
           <summary>Game systems</summary>
@@ -279,21 +415,21 @@
     </article>
 
     <!-- BUILD A COW -->
-    <article class="project flip">
+    <article class="project flip reveal">
       <div class="media-col">
-        <div class="media" id="player-cow" data-yt="rI_P12_gUpk" data-title="Build a Cow: overview"></div>
-        <div class="clips-label">Feature clips</div>
+        <div class="frame"><div class="media" id="player-cow" data-yt="rI_P12_gUpk" data-title="Build a Cow · trailer"></div></div>
+        <div class="clips-label">Feature clips ▸</div>
         <div class="clips" data-player="player-cow">
-          <button class="clip" data-yt="rI_P12_gUpk"><span>Overview</span></button>
+          <button class="clip" data-yt="rI_P12_gUpk"><span>Trailer</span></button>
           <button class="clip" data-yt="NNVdgbH-_Sk"><span>Game side: match &amp; matchmaking</span></button>
           <button class="clip" data-yt="H7PXIVNW0uc"><span>Meta side: progression &amp; shop</span></button>
         </div>
       </div>
-      <div>
-        <div class="role">Lead developer: match server, all UI, progression, monetization</div>
-        <h3>Build a Cow</h3>
-        <div class="tags"><span class="tag">Card Game</span><span class="tag">Matchmaking</span><span class="tag">Ranked Elo</span><span class="tag">Monetization</span><span class="tag">Mobile-first</span></div>
-        <p>Players pair Head and Tail cards to build cows, then steal, scare and swipe each other's herds with action cards and coin-flip challenges. The biggest herd wins.</p>
+      <div class="info-panel on-light">
+        <div class="kicker">Lead developer · server, UI, progression, monetization</div>
+        <h3><span class="ransom" data-ransom>Build a Cow</span></h3>
+        <div class="tagbar"><span class="tag">Card Game</span><span class="tag">Matchmaking</span><span class="tag">Ranked Elo</span><span class="tag">Monetization</span><span class="tag">Mobile-first</span></div>
+        <p>A multiplayer card game for 2–6 players. Pair Head and Tail cards to build cows, then steal, scare and swipe each other's herds with action cards and coin-flip challenges. The biggest herd wins.</p>
         <details>
           <summary>Game systems</summary>
           <ul>
@@ -316,110 +452,145 @@
             <li>Developer products, game passes (VIP, 2x coins), gifting, group-join rewards and timed offers</li>
           </ul>
         </details>
-        <a class="link" href="https://www.roblox.com/games/134807556388850" target="_blank" rel="noopener">Play on Roblox →</a>
+        <a class="play-link" href="https://www.roblox.com/games/134807556388850" target="_blank" rel="noopener">Play on Roblox ▸</a>
       </div>
     </article>
 
-    <!-- FITTING ROOM PLUGIN -->
-    <article class="project">
-      <div class="media m-plugin">
-        <img src="media/fitting-room.gif" alt="Fitting Room plugin" onerror="this.remove()">
-        <div class="ph">Fitting Room<small>Roblox Studio plugin</small></div>
+    <!-- FITTING ROOM -->
+    <article class="project reveal">
+      <div class="media-col">
+        <div class="frame">
+          <div class="media plugin-art">
+            <span class="free-badge">FREE</span>
+            <img src="media/fitting-room.png" alt="Fitting Room plugin icon: a white clothes hanger with a sparkle on a blue tile">
+            <div class="now">Fitting Room · Studio plugin</div>
+          </div>
+        </div>
       </div>
-      <div>
-        <div class="role">Creator Store plugin</div>
-        <h3>Fitting Room</h3>
-        <div class="tags"><span class="tag">Studio Plugin</span><span class="tag">Tooling</span></div>
-        <!-- TODO: add a 1–2 sentence description of what the plugin does -->
-        <p>A Roblox Studio plugin published on the Creator Store.</p>
-        <a class="link" href="https://create.roblox.com/store/asset/103971586563561/Fitting-Room" target="_blank" rel="noopener">View on Creator Store →</a>
+      <div class="info-panel on-light">
+        <div class="kicker">Creator Store plugin · R6 &amp; R15</div>
+        <h3><span class="ransom" data-ransom>Fitting Room</span></h3>
+        <div class="tagbar"><span class="tag">Studio Plugin</span><span class="tag">Avatar Tools</span><span class="tag">Catalog API</span></div>
+        <p>Browse the Roblox catalog and dress R6 or R15 rigs without leaving Studio. It's useful for NPCs, shopkeepers, cutscenes, GFX, or just testing outfits.</p>
+        <div class="feature-grid">
+          <div class="feature"><b>Search the catalog</b>Hats, hair, clothes, layered items and bundles.</div>
+          <div class="feature"><b>Try or insert</b>Preview an item on the avatar, or drop it straight into your game.</div>
+          <div class="feature"><b>Dress any rig</b>Select a rig first and the plugin dresses that one instead.</div>
+          <div class="feature"><b>Load any player</b>Pull an avatar by username, remove items you don't want and insert it as a rig.</div>
+          <div class="feature"><b>Recolor</b>Change body part colors on the preview.</div>
+          <div class="feature"><b>Your UI, your way</b>Resizable, movable windows with custom colors, transparency and background.</div>
+        </div>
+        <a class="play-link" href="https://create.roblox.com/store/asset/103971586563561/Fitting-Room" target="_blank" rel="noopener">Get it free ▸</a>
       </div>
     </article>
   </div>
 </section>
 
+<div class="divider" aria-hidden="true"></div>
+
 <section id="skills">
   <div class="wrap">
-    <div class="eyebrow">// skills</div>
-    <h2>What I bring</h2>
-    <p class="sub">Everything a game needs between the art and the players.</p>
-    <div class="grid">
-      <div class="card skill"><div class="icon">{}</div><div><h3>Luau</h3><p>Modules/OOP, client-server architecture, Remotes with server validation.</p></div></div>
-      <div class="card skill"><div class="icon">TD</div><div><h3>Tower defense</h3><p>Pathing, waves, enemy scaling, targeting, placement, upgrades, economy.</p></div></div>
-      <div class="card skill"><div class="icon">♠</div><div><h3>Turn-based &amp; card games</h3><p>Server-owned state, turn systems, interrupt windows, bots that fill seats and cover AFK players.</p></div></div>
-      <div class="card skill"><div class="icon">⇄</div><div><h3>Matchmaking</h3><p>Cross-server MemoryStore queues, friend lobbies, ranked Elo with tiers, rejoining.</p></div></div>
-      <div class="card skill"><div class="icon">DB</div><div><h3>Data</h3><p>DataStores, session locking, autosave, save on leave, data migration.</p></div></div>
-      <div class="card skill"><div class="icon">UI</div><div><h3>UI scripting</h3><p>Bringing finished UI to life with tweens, viewports, tooltips and popups, or building full mobile-first UI.</p></div></div>
-      <div class="card skill"><div class="icon">R$</div><div><h3>Monetization</h3><p>Game passes, dev products with once-only receipt handling, gifting, season passes, timed offers, group perks.</p></div></div>
-      <div class="card skill"><div class="icon">∑</div><div><h3>Balancing</h3><p>Formula-based models for damage, prices and enemy health.</p></div></div>
+    <div class="sec-head"><span class="sec-num">03</span><h2><span class="ransom" data-ransom>Skills</span></h2></div>
+    <p class="sub">Everything a game needs between the art and the players. Pick a skill to see the details.</p>
+    <div class="skills-wrap">
+      <ul class="command" id="cmdList">
+        <li class="cmd" tabindex="0" data-d="Modules and OOP, client-server architecture, and RemoteEvents/RemoteFunctions with server validation."><span class="k">01</span><span class="t">Luau</span></li>
+        <li class="cmd" tabindex="0" data-d="Pathing, waves, enemy scaling, targeting, placement, upgrades and economy."><span class="k">02</span><span class="t">Tower defense</span></li>
+        <li class="cmd" tabindex="0" data-d="Server-owned game state, turn systems, interrupt windows, and AI bots that fill seats and take over AFK players."><span class="k">03</span><span class="t">Card &amp; turn-based</span></li>
+        <li class="cmd" tabindex="0" data-d="Cross-server Quick Play with MemoryStore queues, friend lobbies, ranked Elo with tiers, and rejoining after a disconnect."><span class="k">04</span><span class="t">Matchmaking</span></li>
+        <li class="cmd" tabindex="0" data-d="DataStores, session-locked saves, autosave, save on leave and data migration."><span class="k">05</span><span class="t">Data</span></li>
+        <li class="cmd" tabindex="0" data-d="Bringing finished UI to life with tweens, viewports, tooltips and popups, or building full UI mobile-first."><span class="k">06</span><span class="t">UI scripting</span></li>
+        <li class="cmd" tabindex="0" data-d="Game passes, developer products with once-only receipt handling, gifting, season passes, timed offers and group perks."><span class="k">07</span><span class="t">Monetization</span></li>
+        <li class="cmd" tabindex="0" data-d="Formula-based balance models for damage, prices and enemy health."><span class="k">08</span><span class="t">Balancing</span></li>
+      </ul>
+      <div class="skill-detail" aria-live="polite">
+        <span class="label">Selected skill</span>
+        <h3 id="skillTitle">Luau</h3>
+        <p id="skillDesc">Modules and OOP, client-server architecture, and RemoteEvents/RemoteFunctions with server validation.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="hire">
   <div class="wrap">
-    <div class="eyebrow">// working together</div>
-    <h2>Availability &amp; payment</h2>
+    <div class="sec-head"><span class="sec-num">04</span><h2><span class="ransom" data-ransom>Hire me</span></h2></div>
     <p class="sub">I send daily progress updates with clips, so you always know where your project stands.</p>
-    <div class="info">
-      <div class="card">
-        <h3 style="margin-bottom:8px">Availability</h3>
+    <div class="hire-grid">
+      <div class="hire-card reveal">
+        <h3>Availability</h3>
         <ul>
-          <li>Hours <b>~12 hours / day</b></li>
-          <li>Timezone <b>GMT+8</b></li>
-          <li>Updates <b>Daily, with clips</b></li>
-          <li>Long-term work <b>Open</b></li>
+          <li><span>Hours</span><b>~12 hours / day</b></li>
+          <li><span>Timezone</span><b>GMT+8</b></li>
+          <li><span>Updates</span><b>Daily, with clips</b></li>
+          <li><span>Long-term</span><b>Open</b></li>
         </ul>
       </div>
-      <div class="card">
-        <h3 style="margin-bottom:8px">Payment</h3>
+      <div class="hire-card reveal">
+        <h3>Payment</h3>
         <ul>
-          <li>Pricing <b>Per task or per project</b></li>
+          <li><span>Pricing</span><b>Per task or per project</b></li>
           <!-- TODO: confirm which payment methods you accept -->
-          <li>Methods <b>PayPal · Wise · Robux</b></li>
-          <li>Terms <b>Agreed before work starts</b></li>
+          <li><span>Methods</span><b>PayPal · Wise · Robux</b></li>
+          <li><span>Terms</span><b>Agreed before work starts</b></li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<section id="contact" class="contact">
+<section id="contact" class="contact on-red">
   <div class="wrap">
-    <div class="eyebrow">// contact</div>
-    <h2>Let's build your game</h2>
-    <p class="sub">Send me a message with what you're building and what you need scripted.</p>
-    <div class="btns">
-      <button class="btn primary" id="copyDiscord" type="button">Discord: <span class="mono">xylorage</span></button>
-      <a class="btn" href="https://devforum.roblox.com/u/XyLoRage" target="_blank" rel="noopener">DevForum: XyLoRage</a>
-      <a class="btn" href="https://devforum.roblox.com/t/4946218" target="_blank" rel="noopener">DevForum portfolio post</a>
-      <a class="btn" href="https://www.roblox.com/games/134807556388850" target="_blank" rel="noopener">Play Build a Cow</a>
+    <div class="card-call reveal">
+      <h2><span class="ransom" data-ransom>Let's build your game</span></h2>
+      <p>Send me a message with what you're building and what you need scripted.</p>
+      <div class="btns">
+        <button class="btn red" id="copyDiscord" type="button">Discord · xylorage</button>
+        <a class="btn" href="https://devforum.roblox.com/u/XyLoRage" target="_blank" rel="noopener">DevForum</a>
+        <a class="btn" href="https://devforum.roblox.com/t/4946218" target="_blank" rel="noopener">Portfolio post</a>
+      </div>
+      <div class="copy-note" id="copyNote"></div>
     </div>
-    <div class="copy-note" id="copyNote"></div>
   </div>
 </section>
 
 <footer>
-  <div class="wrap">© <span id="yr"></span> XyLo · Roblox Scripter</div>
+  © <span id="yr"></span> <b>XyLo</b> · Roblox Scripter
 </footer>
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
 
+  // Cut-out lettering: each letter gets a style picked from a fixed sequence, so the layout never jumps
+  const seq = [0, 2, 1, 4, 3, 5, 0, 1, 2, 4, 5, 3];
+  document.querySelectorAll('[data-ransom]').forEach((el, k) => {
+    const text = el.textContent;
+    el.setAttribute('aria-label', text);
+    el.textContent = '';
+    let i = 0;
+    text.split(' ').forEach((word, w) => {
+      const wrap = document.createElement('span');
+      wrap.className = 'word'; wrap.setAttribute('aria-hidden', 'true');
+      [...word].forEach(c => {
+        const s = document.createElement('span');
+        s.className = 'ch v' + seq[(i++ + k * 3) % seq.length]; s.textContent = c;
+        wrap.appendChild(s);
+      });
+      el.appendChild(wrap);
+      i++;
+    });
+  });
+
   // Lightweight YouTube players: show a thumbnail, load the video only on click
   const thumb = id => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
-  function showThumb(el, id, title) {
-    el.dataset.yt = id;
-    el.innerHTML = `<img class="thumb" src="${thumb(id)}" alt="${title || ''}" loading="lazy"><div class="play"></div>` +
-      (title ? `<div class="now">${title}</div>` : '');
-  }
   function play(el, id) {
     el.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="Video"
       allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-    el.removeAttribute('data-yt'); el.dataset.playing = id;
+    el.removeAttribute('data-yt');
   }
   document.querySelectorAll('.media[data-yt]').forEach(el => {
-    showThumb(el, el.dataset.yt, el.dataset.title);
+    const id = el.dataset.yt, title = el.dataset.title || '';
+    el.innerHTML = `<img class="thumb" src="${thumb(id)}" alt="${title}" loading="lazy"><div class="play-wrap"><div class="play"></div></div><div class="now">${title}</div>`;
     el.addEventListener('click', () => { if (el.dataset.yt) play(el, el.dataset.yt); });
   });
   document.querySelectorAll('.clips').forEach(group => {
@@ -435,9 +606,31 @@
       });
     });
   });
+
+  // Skills command menu
+  const cmds = document.querySelectorAll('.cmd');
+  const sT = document.getElementById('skillTitle'), sD = document.getElementById('skillDesc');
+  function pick(c) {
+    cmds.forEach(x => x.classList.remove('active')); c.classList.add('active');
+    sT.textContent = c.querySelector('.t').textContent; sD.textContent = c.dataset.d;
+  }
+  cmds.forEach(c => {
+    c.addEventListener('mouseenter', () => pick(c));
+    c.addEventListener('click', () => pick(c));
+    c.addEventListener('focus', () => pick(c));
+  });
+  pick(cmds[0]);
+
+  // Reveal on scroll
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: .12 }) : null;
+  document.querySelectorAll('.reveal').forEach(el => io ? io.observe(el) : el.classList.add('in'));
+
+  // Copy Discord
   document.getElementById('copyDiscord').addEventListener('click', async () => {
     const note = document.getElementById('copyNote');
-    try { await navigator.clipboard.writeText('xylorage'); note.textContent = 'Copied Discord username!'; }
+    try { await navigator.clipboard.writeText('xylorage'); note.textContent = 'Discord username copied!'; }
     catch { note.textContent = 'Discord: xylorage'; }
     setTimeout(() => note.textContent = '', 2500);
   });
