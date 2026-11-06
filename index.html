@@ -255,14 +255,6 @@
     font-family: var(--display); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; overflow: hidden;
     padding: 4px 0; transform: rotate(-6deg); border-block: 3px solid var(--black); font-size: .95rem;
   }
-  .wip-art .field { position: absolute; left: 0; right: 0; bottom: 30%; display: flex; justify-content: space-around; align-items: flex-end; padding: 0 12%; }
-  .sprout { position: relative; width: 60px; height: 90px; transform-origin: 50% 100%; animation: sway 3s ease-in-out infinite; }
-  .sprout i { position: absolute; left: 50%; bottom: 0; width: 8px; height: 62%; background: var(--leaf); translate: -50% 0; border: 3px solid var(--black); border-bottom: 0; }
-  .sprout b { position: absolute; top: 4%; width: 34px; height: 22px; background: var(--leaf); border: 3px solid var(--black); border-radius: 0 100% 0 100%; }
-  .sprout b:first-of-type { left: 50%; } .sprout b:last-of-type { right: 50%; transform: scaleX(-1); }
-  .sprout.s-b { height: 120px; animation-delay: .6s; } .sprout.s-b b { width: 42px; height: 26px; }
-  .sprout.s-c { height: 70px; animation-delay: 1.2s; }
-  @keyframes sway { 50% { rotate: 6deg; } }
   .wip-badge { background: var(--leaf); color: #fff; z-index: 2; }
   .wip-link { cursor: default; background: var(--straw); }
   .wip-link:hover { transform: none; }
@@ -481,7 +473,7 @@
       <p class="lead">I have 6+ years of programming experience and I specialize in game systems and core loops. Give me finished UI, maps and models, and I'll turn them into a working game.</p>
       <div class="btns">
         <a href="#work" class="btn red">See my work</a>
-        <a href="https://discordapp.com/users/562896984344625183" target="_blank" rel="noopener" class="btn">Discord me</a>
+        <a href="https://discordapp.com/users/562896984344625183" target="_blank" rel="noopener" class="btn">Discord</a>
       </div>
     </div>
     <aside class="stat-card" aria-label="Quick stats">
@@ -640,11 +632,6 @@
         <div class="frame">
           <div class="media wip-art">
             <div class="tape">In development &#xB7; In development &#xB7; In development &#xB7; In development &#xB7; In development</div>
-            <div class="field" aria-hidden="true">
-              <div class="sprout s-a"><i></i><b></b><b></b></div>
-              <div class="sprout s-b"><i></i><b></b><b></b></div>
-              <div class="sprout s-c"><i></i><b></b><b></b></div>
-            </div>
             <span class="free-badge wip-badge">ONGOING</span>
             <div class="now">Harvest Evergreen &#xB7; coming soon</div>
           </div>
