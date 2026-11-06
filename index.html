@@ -7,6 +7,7 @@
 <meta name="description" content="XyLo: Roblox scripter with 6+ years of experience in full-stack game systems, core loops, matchmaking, data and monetization.">
 <meta name="theme-color" content="#e5173f">
 <link rel="icon" href="media/fitting-room.png">
+<script>try { if (localStorage.getItem('motion') === 'off') document.documentElement.classList.add('no-motion'); } catch (e) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bowlby+One+SC&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -412,18 +413,27 @@
   .burst { position: fixed; width: 12px; height: 12px; pointer-events: none; z-index: 300; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); animation: fly .6s ease-out forwards; }
   @keyframes fly { to { translate: var(--tx) var(--ty); scale: 0; rotate: 180deg; } }
 
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { transition: none !important; animation: none !important; }
-    .reveal, .ransom.anim .ch, .sec-num { opacity: 1 !important; translate: none !important; scale: 1 !important; rotate: 0deg; }
-    .intro { display: none; }
-    html { scroll-behavior: auto; }
+  /* Motion is ON for everyone by default; the toggle button adds .no-motion */
+  html.no-motion *, html.no-motion *::before, html.no-motion *::after { transition: none !important; animation: none !important; }
+  html.no-motion .reveal, html.no-motion .ransom.anim .ch, html.no-motion .sec-num { opacity: 1 !important; translate: none !important; scale: 1 !important; rotate: 0deg; }
+  html.no-motion .intro { display: none; }
+  html.no-motion { scroll-behavior: auto; }
+
+  .motion-toggle {
+    position: fixed; right: 16px; bottom: 16px; z-index: 70; cursor: pointer; border: 3px solid #fff;
+    background: var(--black); color: #fff; font-family: var(--display); font-size: .95rem; letter-spacing: .08em; text-transform: uppercase;
+    padding: 6px 14px; transform: skewX(-10deg); box-shadow: 4px 4px 0 var(--straw); transition: background .15s;
   }
+  .motion-toggle:hover { background: var(--straw); }
+  .motion-toggle b { color: var(--straw-hot); font-weight: 400; }
+  .motion-toggle:hover b { color: #fff; }
 </style>
 </head>
 <body>
 
 <div class="intro" id="intro" aria-hidden="true"><i></i><i></i><i><span class="ransom logo-big" data-ransom>XyLo</span></i></div>
 <div class="progress" id="progress" aria-hidden="true"></div>
+<button class="motion-toggle" id="motionToggle" type="button" aria-label="Toggle animations">Motion: <b>On</b></button>
 
 <nav>
   <div class="wrap">
@@ -677,7 +687,15 @@
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce = document.documentElement.classList.contains('no-motion');
+
+  // Motion toggle (remembered per visitor)
+  const mt = document.getElementById('motionToggle');
+  mt.querySelector('b').textContent = reduce ? 'Off' : 'On';
+  mt.addEventListener('click', () => {
+    try { localStorage.setItem('motion', reduce ? 'on' : 'off'); } catch (e) {}
+    location.reload();
+  });
 
   // Cut-out lettering: each letter gets a style picked from a fixed sequence, so the layout never jumps
   const seq = [0, 2, 1, 4, 3, 5, 0, 1, 2, 4, 5, 3];
