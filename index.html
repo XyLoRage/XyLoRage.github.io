@@ -244,6 +244,29 @@
     position: absolute; top: 14px; right: 14px; z-index: 1; font-family: var(--display); font-size: 1.2rem; letter-spacing: .06em;
     background: var(--seed); color: var(--black); padding: 4px 14px; transform: rotate(8deg); border: 3px solid var(--black);
   }
+  /* ongoing project art: tilled field with growing sprouts */
+  .wip-art {
+    background:
+      repeating-linear-gradient(0deg, rgba(10,6,8,.28) 0 6px, transparent 6px 26px) 0 100% / 100% 42% no-repeat,
+      linear-gradient(180deg, var(--pink) 0 58%, var(--straw-dark) 58%);
+  }
+  .wip-art .tape {
+    position: absolute; top: 14%; left: -10%; right: -10%; z-index: 1; background: var(--seed); color: var(--black);
+    font-family: var(--display); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; overflow: hidden;
+    padding: 4px 0; transform: rotate(-6deg); border-block: 3px solid var(--black); font-size: .95rem;
+  }
+  .wip-art .field { position: absolute; left: 0; right: 0; bottom: 30%; display: flex; justify-content: space-around; align-items: flex-end; padding: 0 12%; }
+  .sprout { position: relative; width: 60px; height: 90px; transform-origin: 50% 100%; animation: sway 3s ease-in-out infinite; }
+  .sprout i { position: absolute; left: 50%; bottom: 0; width: 8px; height: 62%; background: var(--leaf); translate: -50% 0; border: 3px solid var(--black); border-bottom: 0; }
+  .sprout b { position: absolute; top: 4%; width: 34px; height: 22px; background: var(--leaf); border: 3px solid var(--black); border-radius: 0 100% 0 100%; }
+  .sprout b:first-of-type { left: 50%; } .sprout b:last-of-type { right: 50%; transform: scaleX(-1); }
+  .sprout.s-b { height: 120px; animation-delay: .6s; } .sprout.s-b b { width: 42px; height: 26px; }
+  .sprout.s-c { height: 70px; animation-delay: 1.2s; }
+  @keyframes sway { 50% { rotate: 6deg; } }
+  .wip-badge { background: var(--leaf); color: #fff; z-index: 2; }
+  .wip-link { cursor: default; background: var(--straw); }
+  .wip-link:hover { transform: none; }
+
   .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 4px; }
   @media (max-width: 520px) { .feature-grid { grid-template-columns: 1fr; } }
   .feature { background: var(--black); color: #fff; padding: 12px 14px; font-size: .86rem; line-height: 1.4; clip-path: polygon(0 0, 100% 0, 97% 100%, 0 100%); }
@@ -464,6 +487,7 @@
     <aside class="stat-card" aria-label="Quick stats">
       <div class="stat"><span>Experience</span><b><span class="count" data-to="6">6</span><em>+</em> YRS</b></div>
       <div class="stat"><span>Full games shipped</span><b><span class="count" data-to="2">2</span></b></div>
+      <div class="stat"><span>Commissions completed</span><b><span class="count" data-to="5">5</span></b></div>
       <div class="stat"><span>Studio plugins</span><b><span class="count" data-to="1">1</span></b></div>
       <div class="stat"><span>Availability</span><b><span class="count" data-to="12">12</span><em>H</em>/DAY</b></div>
       <div class="online">Online &#xB7; GMT+8</div>
@@ -471,7 +495,7 @@
   </div>
 </header>
 
-<div class="ticker" aria-hidden="true" data-items="Roblox Scripter|Game Systems|Server-Authoritative|Tower Defense|Card Games|Matchmaking|DataStores|Monetization|Open for Commissions"><div class="track"></div></div>
+<div class="ticker" aria-hidden="true" data-items="Roblox Scripter|5 Commissions Completed|Game Systems|Server-Authoritative|Tower Defense|Card Games|Matchmaking|DataStores|Monetization|Open for Commissions"><div class="track"></div></div>
 
 <section id="about">
   <div class="wrap">
@@ -609,10 +633,35 @@
         <a class="play-link" href="https://create.roblox.com/store/asset/103971586563561/Fitting-Room" target="_blank" rel="noopener">Get it free &#x25B8;</a>
       </div>
     </article>
+
+    <!-- HARVEST EVERGREEN (ongoing) -->
+    <article class="project flip reveal">
+      <div class="media-col">
+        <div class="frame">
+          <div class="media wip-art">
+            <div class="tape">In development &#xB7; In development &#xB7; In development &#xB7; In development &#xB7; In development</div>
+            <div class="field" aria-hidden="true">
+              <div class="sprout s-a"><i></i><b></b><b></b></div>
+              <div class="sprout s-b"><i></i><b></b><b></b></div>
+              <div class="sprout s-c"><i></i><b></b><b></b></div>
+            </div>
+            <span class="free-badge wip-badge">ONGOING</span>
+            <div class="now">Harvest Evergreen &#xB7; coming soon</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-panel on-light">
+        <div class="kicker">Ongoing work &#xB7; currently in development</div>
+        <h3><span class="ransom" data-ransom>Harvest Evergreen</span></h3>
+        <div class="tagbar"><span class="tag">Farming</span><span class="tag">Life Sim</span><span class="tag">In Progress</span></div>
+        <p>A farming life sim inspired by Stardew Valley. Development is underway, and clips and system breakdowns will be added here as it comes together.</p>
+        <span class="play-link wip-link">Coming soon &#x25B8;</span>
+      </div>
+    </article>
   </div>
 </section>
 
-<div class="ticker alt" aria-hidden="true" data-items="Rogue Defense|Build a Cow|Fitting Room|Luau|OOP|MemoryStore|Elo Ranking|Session Locking|Mobile-First UI"><div class="track"></div></div>
+<div class="ticker alt" aria-hidden="true" data-items="Now Building: Harvest Evergreen|Rogue Defense|Build a Cow|Fitting Room|Luau|OOP|MemoryStore|Elo Ranking|Session Locking|Mobile-First UI"><div class="track"></div></div>
 
 <section id="skills">
   <div class="wrap">
