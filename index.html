@@ -93,8 +93,8 @@
   /* Projects */
   .project { display: grid; grid-template-columns: 1.05fr 1fr; gap: 32px; align-items: start; margin-bottom: 64px; }
   .project:last-child { margin-bottom: 0; }
-  .project.flip .media { order: 2; }
-  @media (max-width: 860px) { .project { grid-template-columns: 1fr; } .project.flip .media { order: 0; } }
+  .project.flip > .media, .project.flip > .media-col { order: 2; }
+  @media (max-width: 860px) { .project { grid-template-columns: 1fr; } .project.flip > .media, .project.flip > .media-col { order: 0; } }
   .media {
     aspect-ratio: 16/9; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; position: relative;
     display: grid; place-items: center; text-align: center;
@@ -117,6 +117,29 @@
   details[open] summary::after { content: "–"; }
   details ul { padding: 0 16px 14px 32px; color: var(--muted); font-size: .9rem; }
   details li { margin: 4px 0; }
+  /* YouTube players */
+  .media[data-yt] { cursor: pointer; background: #000; }
+  .media[data-yt] .thumb { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: .2s; }
+  .media[data-yt]:hover .thumb { filter: brightness(.8); }
+  .media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .play {
+    position: relative; width: 68px; height: 48px; border-radius: 12px; background: rgba(0,0,0,.7);
+    display: grid; place-items: center; transition: .2s; border: 1px solid rgba(255,255,255,.15);
+  }
+  .play::after { content: ""; border-style: solid; border-width: 10px 0 10px 17px; border-color: transparent transparent transparent #fff; margin-left: 4px; }
+  .media[data-yt]:hover .play { background: var(--accent); }
+  .now { position: absolute; left: 12px; bottom: 12px; font-size: .8rem; font-weight: 600; background: rgba(0,0,0,.72); padding: 4px 10px; border-radius: 6px; }
+  .media-col { display: flex; flex-direction: column; gap: 12px; }
+  .clips-label { font-size: .8rem; color: var(--muted); font-family: "JetBrains Mono", monospace; }
+  .clips { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .clip {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    cursor: pointer; text-align: left; color: var(--text); font: inherit; padding: 0; transition: .15s;
+  }
+  .clip:hover, .clip.active { border-color: var(--accent); }
+  .clip img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+  .clip span { display: block; padding: 7px 9px; font-size: .78rem; line-height: 1.3; }
+
   .link { display: inline-flex; gap: 6px; margin-top: 8px; color: var(--accent); font-weight: 600; font-size: .94rem; }
   .link:hover { text-decoration: underline; }
 
@@ -208,10 +231,18 @@
 
     <!-- ROGUE DEFENSE -->
     <article class="project">
-      <div class="media m-rogue">
-        <!-- Put a GIF or MP4 in site/media/ and it shows here automatically -->
-        <img src="media/rogue-defense.gif" alt="Rogue Defense weapons and VFX montage" onerror="this.remove()">
-        <div class="ph">Rogue Defense<small>roguelite tower defense</small></div>
+      <div class="media-col">
+        <div class="media" id="player-rogue" data-yt="SVGpns3lulk" data-title="Rogue Defense: overview"></div>
+        <div class="clips-label">Feature clips</div>
+        <div class="clips" data-player="player-rogue">
+          <button class="clip" data-yt="SVGpns3lulk"><span>Overview</span></button>
+          <button class="clip" data-yt="xejq56rgScY"><span>Enemy spawning &amp; waves</span></button>
+          <button class="clip" data-yt="jyB9hnXX-gE"><span>Placement, upgrades &amp; targeting</span></button>
+          <button class="clip" data-yt="60pNBnVYCvg"><span>Characters &amp; perks</span></button>
+          <button class="clip" data-yt="ZRWyhoUYOuQ"><span>Inventory &amp; loadout</span></button>
+          <button class="clip" data-yt="iolnladY1g4"><span>Chest opening &amp; reforging</span></button>
+          <button class="clip" data-yt="O0OpoYod_vA"><span>Interactive lobby</span></button>
+        </div>
       </div>
       <div>
         <div class="role">Scripted end to end: lobby + match place</div>
@@ -249,9 +280,14 @@
 
     <!-- BUILD A COW -->
     <article class="project flip">
-      <div class="media m-cow">
-        <img src="media/build-a-cow.gif" alt="Build a Cow gameplay" onerror="this.remove()">
-        <div class="ph">Build a Cow<small>multiplayer card game · 2–6 players</small></div>
+      <div class="media-col">
+        <div class="media" id="player-cow" data-yt="rI_P12_gUpk" data-title="Build a Cow: overview"></div>
+        <div class="clips-label">Feature clips</div>
+        <div class="clips" data-player="player-cow">
+          <button class="clip" data-yt="rI_P12_gUpk"><span>Overview</span></button>
+          <button class="clip" data-yt="NNVdgbH-_Sk"><span>Game side: match &amp; matchmaking</span></button>
+          <button class="clip" data-yt="H7PXIVNW0uc"><span>Meta side: progression &amp; shop</span></button>
+        </div>
       </div>
       <div>
         <div class="role">Lead developer: match server, all UI, progression, monetization</div>
@@ -357,6 +393,7 @@
       <button class="btn primary" id="copyDiscord" type="button">Discord: <span class="mono">xylorage</span></button>
       <a class="btn" href="https://devforum.roblox.com/u/XyLoRage" target="_blank" rel="noopener">DevForum: XyLoRage</a>
       <a class="btn" href="https://devforum.roblox.com/t/4946218" target="_blank" rel="noopener">DevForum portfolio post</a>
+      <a class="btn" href="https://www.roblox.com/games/134807556388850" target="_blank" rel="noopener">Play Build a Cow</a>
     </div>
     <div class="copy-note" id="copyNote"></div>
   </div>
@@ -368,6 +405,36 @@
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Lightweight YouTube players: show a thumbnail, load the video only on click
+  const thumb = id => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+  function showThumb(el, id, title) {
+    el.dataset.yt = id;
+    el.innerHTML = `<img class="thumb" src="${thumb(id)}" alt="${title || ''}" loading="lazy"><div class="play"></div>` +
+      (title ? `<div class="now">${title}</div>` : '');
+  }
+  function play(el, id) {
+    el.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="Video"
+      allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    el.removeAttribute('data-yt'); el.dataset.playing = id;
+  }
+  document.querySelectorAll('.media[data-yt]').forEach(el => {
+    showThumb(el, el.dataset.yt, el.dataset.title);
+    el.addEventListener('click', () => { if (el.dataset.yt) play(el, el.dataset.yt); });
+  });
+  document.querySelectorAll('.clips').forEach(group => {
+    const player = document.getElementById(group.dataset.player);
+    const btns = group.querySelectorAll('.clip');
+    btns.forEach((b, i) => {
+      b.insertAdjacentHTML('afterbegin', `<img src="${thumb(b.dataset.yt)}" alt="" loading="lazy">`);
+      if (i === 0) b.classList.add('active');
+      b.addEventListener('click', () => {
+        btns.forEach(x => x.classList.remove('active')); b.classList.add('active');
+        play(player, b.dataset.yt);
+        player.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  });
   document.getElementById('copyDiscord').addEventListener('click', async () => {
     const note = document.getElementById('copyNote');
     try { await navigator.clipboard.writeText('xylorage'); note.textContent = 'Copied Discord username!'; }
