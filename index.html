@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XyLo | Roblox Scripter</title>
+<meta name="description" content="XyLo: Roblox scripter with 6+ years of experience in full-stack game systems, core loops, matchmaking, data and monetization.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-2: #11141b;
+    --card: #151924;
+    --line: #232837;
+    --text: #e8ebf2;
+    --muted: #9aa3b5;
+    --accent: #7c5cff;
+    --accent-2: #22d3ee;
+    --good: #34d399;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  code, .mono { font-family: "JetBrains Mono", monospace; }
+
+  /* Nav */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(11,13,18,.82); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; }
+  .logo span { color: var(--accent); }
+  nav ul { display: flex; gap: 22px; list-style: none; font-size: .92rem; color: var(--muted); }
+  nav ul a:hover { color: var(--text); }
+  @media (max-width: 640px) { nav ul { display: none; } }
+
+  /* Hero */
+  .hero { padding: 96px 0 72px; position: relative; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: -40% -10% auto auto; width: 620px; height: 620px;
+    background: radial-gradient(circle, rgba(124,92,255,.28), transparent 65%);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .82rem; color: var(--good);
+    border: 1px solid rgba(52,211,153,.35); background: rgba(52,211,153,.08);
+    padding: 6px 12px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
+  h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.05; letter-spacing: -.035em; font-weight: 800; }
+  h1 .grad { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { color: var(--muted); font-size: 1.15rem; max-width: 620px; margin: 20px 0 32px; }
+  .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: .95rem;
+    border: 1px solid var(--line); background: var(--card); transition: .15s;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { filter: brightness(1.1); }
+  .stats { display: flex; flex-wrap: wrap; gap: 36px; margin-top: 56px; }
+  .stat b { display: block; font-size: 1.8rem; font-weight: 800; }
+  .stat span { color: var(--muted); font-size: .88rem; }
+
+  /* Sections */
+  section { padding: 72px 0; border-top: 1px solid var(--line); }
+  .eyebrow { font-family: "JetBrains Mono", monospace; color: var(--accent-2); font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; }
+  h2 { font-size: clamp(1.8rem, 4vw, 2.4rem); letter-spacing: -.03em; margin: 8px 0 14px; }
+  .sub { color: var(--muted); max-width: 640px; margin-bottom: 36px; }
+
+  /* Principles */
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .card h3 { font-size: 1.02rem; margin-bottom: 6px; }
+  .card p { color: var(--muted); font-size: .93rem; }
+  .icon { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 14px; background: rgba(124,92,255,.14); color: var(--accent); font-family: "JetBrains Mono", monospace; font-weight: 600; }
+
+  /* Projects */
+  .project { display: grid; grid-template-columns: 1.05fr 1fr; gap: 32px; align-items: start; margin-bottom: 64px; }
+  .project:last-child { margin-bottom: 0; }
+  .project.flip .media { order: 2; }
+  @media (max-width: 860px) { .project { grid-template-columns: 1fr; } .project.flip .media { order: 0; } }
+  .media {
+    aspect-ratio: 16/9; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; position: relative;
+    display: grid; place-items: center; text-align: center;
+  }
+  .media img, .media video { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .media .ph { color: rgba(255,255,255,.85); font-weight: 800; font-size: 1.6rem; letter-spacing: -.02em; padding: 20px; }
+  .media .ph small { display: block; font-weight: 500; font-size: .8rem; opacity: .7; margin-top: 6px; font-family: "JetBrains Mono", monospace; }
+  .m-rogue { background: linear-gradient(135deg, #3b1d6e, #7c2d4a 55%, #c2410c); }
+  .m-cow { background: linear-gradient(135deg, #14532d, #15803d 50%, #ca8a04); }
+  .m-plugin { background: linear-gradient(135deg, #0c4a6e, #1d4ed8 60%, #7c3aed); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
+  .tag { font-size: .78rem; padding: 4px 10px; border-radius: 999px; background: var(--bg-2); border: 1px solid var(--line); color: var(--muted); }
+  .project h3 { font-size: 1.6rem; letter-spacing: -.02em; }
+  .role { color: var(--accent-2); font-size: .88rem; font-weight: 600; }
+  .project > div > p { color: var(--muted); margin-bottom: 16px; }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 12px 16px; font-weight: 600; font-size: .94rem; list-style: none; display: flex; justify-content: space-between; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--muted); }
+  details[open] summary::after { content: "–"; }
+  details ul { padding: 0 16px 14px 32px; color: var(--muted); font-size: .9rem; }
+  details li { margin: 4px 0; }
+  .link { display: inline-flex; gap: 6px; margin-top: 8px; color: var(--accent); font-weight: 600; font-size: .94rem; }
+  .link:hover { text-decoration: underline; }
+
+  /* Skills */
+  .skill { display: flex; gap: 14px; }
+  .skill .icon { flex: none; margin: 0; }
+
+  /* Info */
+  .info { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .info .card ul { list-style: none; color: var(--muted); font-size: .94rem; }
+  .info .card li { padding: 8px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; }
+  .info .card li:last-child { border: 0; }
+  .info .card li b { color: var(--text); font-weight: 600; text-align: right; }
+
+  /* Contact */
+  .contact { text-align: center; }
+  .contact .sub { margin: 0 auto 28px; }
+  .contact .btns { justify-content: center; }
+  .copy-note { color: var(--good); font-size: .85rem; height: 1.2em; margin-top: 12px; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0; color: var(--muted); font-size: .85rem; text-align: center; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="logo">XyLo<span>.</span></a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#hire">Hire</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="badge">Open for commissions &amp; long-term work</div>
+    <h1>Roblox Scripter.<br><span class="grad">Full-stack game systems.</span></h1>
+    <p class="lead">I'm XyLo. I have 6+ years of programming experience and I specialize in game systems and core loops. Give me finished UI, maps and models, and I'll turn them into a working game.</p>
+    <div class="btns">
+      <a href="#work" class="btn primary">See my work</a>
+      <a href="#contact" class="btn">Contact me</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>6+ yrs</b><span>Programming experience</span></div>
+      <div class="stat"><b>2</b><span>Full games scripted end to end</span></div>
+      <div class="stat"><b>12 h/day</b><span>Availability (GMT+8)</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow">// how I work</div>
+    <h2>Built to be secure, scalable and balanced</h2>
+    <p class="sub">I write every system to these four rules, so your game stays hard to exploit, easy to expand and fair to play.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="icon">S</div>
+        <h3>Server-authoritative</h3>
+        <p>The client asks and the server checks. Placement, upgrades, chests, rewards and saving never trust the client.</p>
+      </div>
+      <div class="card">
+        <div class="icon">D</div>
+        <h3>Data-driven</h3>
+        <p>Towers, weapons, enemies, chests and accessories live in shared data modules. Adding content doesn't mean rewriting code.</p>
+      </div>
+      <div class="card">
+        <div class="icon">M</div>
+        <h3>Structured</h3>
+        <p>One module per job, shared modules identical across lobby and game, and comments that explain <em>why</em>.</p>
+      </div>
+      <div class="card">
+        <div class="icon">∑</div>
+        <h3>Balanced with math</h3>
+        <p>Formula-based models connect DPS to power to price, and set enemy HP per wave.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="eyebrow">// showcase</div>
+    <h2>Selected work</h2>
+    <p class="sub">Complete games and tools, from server architecture to the last UI tween.</p>
+
+    <!-- ROGUE DEFENSE -->
+    <article class="project">
+      <div class="media m-rogue">
+        <!-- Put a GIF or MP4 in site/media/ and it shows here automatically -->
+        <img src="media/rogue-defense.gif" alt="Rogue Defense weapons and VFX montage" onerror="this.remove()">
+        <div class="ph">Rogue Defense<small>roguelite tower defense</small></div>
+      </div>
+      <div>
+        <div class="role">Scripted end to end: lobby + match place</div>
+        <h3>Rogue Defense</h3>
+        <div class="tags"><span class="tag">Tower Defense</span><span class="tag">Roguelite</span><span class="tag">Loot System</span><span class="tag">Multi-place</span></div>
+        <p>Deploy characters, equip weapons from your inventory and survive 50 waves across biomes. Bosses use abilities, elements react with each other, and you pick power-up cards between waves. Weapons drop from chests with rarities, levels and random modifiers.</p>
+        <details>
+          <summary>Game systems</summary>
+          <ul>
+            <li>Virtual enemies: the server stores only position, health and waypoint, and clients render them</li>
+            <li>Wave generator with an HP budget that scales by wave<sup>1.3</sup></li>
+            <li>Difficulties, biomes, portals and party scaling</li>
+            <li>Boss abilities: summon minions, disable towers, corrupt enemies, scramble targeting</li>
+            <li>Server-validated placement with a live range and hitbox preview</li>
+            <li>7 targeting modes: First, Last, Near, Strong, Weak, Fastest, Slowest</li>
+            <li>19 weapons built from attack patterns (Single, Splash, Cone, Chain, Burst) on one damage pipeline</li>
+            <li>Data-driven VFX, and burn, chill, poison and charge elements</li>
+            <li>16 characters with perk modules, plus summoner units</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Lobby &amp; progression</summary>
+          <ul>
+            <li>Weapon inventory with rarities, levels, quality rolls and prefix/suffix modifiers</li>
+            <li>Chest opening with weighted rarity tables</li>
+            <li>Reforging: reroll, amplify or remove modifiers</li>
+            <li>Level-locked unlocks (rarities at 11, reforging at 21, Chaotic gear at 31)</li>
+            <li>One data module shared by both places, with save migration</li>
+            <li>Levels/XP, achievements that unlock accessories, global and weekly leaderboards</li>
+            <li>Party lobbies, and a cafeteria where characters sit as NPCs wearing the player's avatar</li>
+          </ul>
+        </details>
+      </div>
+    </article>
+
+    <!-- BUILD A COW -->
+    <article class="project flip">
+      <div class="media m-cow">
+        <img src="media/build-a-cow.gif" alt="Build a Cow gameplay" onerror="this.remove()">
+        <div class="ph">Build a Cow<small>multiplayer card game · 2–6 players</small></div>
+      </div>
+      <div>
+        <div class="role">Lead developer: match server, all UI, progression, monetization</div>
+        <h3>Build a Cow</h3>
+        <div class="tags"><span class="tag">Card Game</span><span class="tag">Matchmaking</span><span class="tag">Ranked Elo</span><span class="tag">Monetization</span><span class="tag">Mobile-first</span></div>
+        <p>Players pair Head and Tail cards to build cows, then steal, scare and swipe each other's herds with action cards and coin-flip challenges. The biggest herd wins.</p>
+        <details>
+          <summary>Game systems</summary>
+          <ul>
+            <li>The server owns the deck, hands and herds</li>
+            <li>Coin-flip challenges with a Re-Flip interrupt window and spectator betting</li>
+            <li>Bots fill empty seats and take over for AFK players</li>
+            <li>Cross-server Quick Play through a MemoryStore queue, plus friend lobbies with invites</li>
+            <li>Ranked mode (2–4 players) with Elo and tiers, and rejoining after a disconnect</li>
+            <li>Scripted tutorial with a coach character</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Meta &amp; monetization</summary>
+          <ul>
+            <li>Session-locked saves, a 2-minute autosave, and purchase receipts processed exactly once</li>
+            <li>Barn idle system: offline coin jug, barn visits and a barn leaderboard</li>
+            <li>Cow-Dex with 21 entries and a 1-in-50 shiny variant</li>
+            <li>Levels/XP, daily quests, login streaks, badge achievements, and a free + premium season pass</li>
+            <li>Cosmetics from a daily shop, chests, the season pass, bundles and group rewards</li>
+            <li>Developer products, game passes (VIP, 2x coins), gifting, group-join rewards and timed offers</li>
+          </ul>
+        </details>
+        <a class="link" href="https://www.roblox.com/games/134807556388850" target="_blank" rel="noopener">Play on Roblox →</a>
+      </div>
+    </article>
+
+    <!-- FITTING ROOM PLUGIN -->
+    <article class="project">
+      <div class="media m-plugin">
+        <img src="media/fitting-room.gif" alt="Fitting Room plugin" onerror="this.remove()">
+        <div class="ph">Fitting Room<small>Roblox Studio plugin</small></div>
+      </div>
+      <div>
+        <div class="role">Creator Store plugin</div>
+        <h3>Fitting Room</h3>
+        <div class="tags"><span class="tag">Studio Plugin</span><span class="tag">Tooling</span></div>
+        <!-- TODO: add a 1–2 sentence description of what the plugin does -->
+        <p>A Roblox Studio plugin published on the Creator Store.</p>
+        <a class="link" href="https://create.roblox.com/store/asset/103971586563561/Fitting-Room" target="_blank" rel="noopener">View on Creator Store →</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow">// skills</div>
+    <h2>What I bring</h2>
+    <p class="sub">Everything a game needs between the art and the players.</p>
+    <div class="grid">
+      <div class="card skill"><div class="icon">{}</div><div><h3>Luau</h3><p>Modules/OOP, client-server architecture, Remotes with server validation.</p></div></div>
+      <div class="card skill"><div class="icon">TD</div><div><h3>Tower defense</h3><p>Pathing, waves, enemy scaling, targeting, placement, upgrades, economy.</p></div></div>
+      <div class="card skill"><div class="icon">♠</div><div><h3>Turn-based &amp; card games</h3><p>Server-owned state, turn systems, interrupt windows, bots that fill seats and cover AFK players.</p></div></div>
+      <div class="card skill"><div class="icon">⇄</div><div><h3>Matchmaking</h3><p>Cross-server MemoryStore queues, friend lobbies, ranked Elo with tiers, rejoining.</p></div></div>
+      <div class="card skill"><div class="icon">DB</div><div><h3>Data</h3><p>DataStores, session locking, autosave, save on leave, data migration.</p></div></div>
+      <div class="card skill"><div class="icon">UI</div><div><h3>UI scripting</h3><p>Bringing finished UI to life with tweens, viewports, tooltips and popups, or building full mobile-first UI.</p></div></div>
+      <div class="card skill"><div class="icon">R$</div><div><h3>Monetization</h3><p>Game passes, dev products with once-only receipt handling, gifting, season passes, timed offers, group perks.</p></div></div>
+      <div class="card skill"><div class="icon">∑</div><div><h3>Balancing</h3><p>Formula-based models for damage, prices and enemy health.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="hire">
+  <div class="wrap">
+    <div class="eyebrow">// working together</div>
+    <h2>Availability &amp; payment</h2>
+    <p class="sub">I send daily progress updates with clips, so you always know where your project stands.</p>
+    <div class="info">
+      <div class="card">
+        <h3 style="margin-bottom:8px">Availability</h3>
+        <ul>
+          <li>Hours <b>~12 hours / day</b></li>
+          <li>Timezone <b>GMT+8</b></li>
+          <li>Updates <b>Daily, with clips</b></li>
+          <li>Long-term work <b>Open</b></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:8px">Payment</h3>
+        <ul>
+          <li>Pricing <b>Per task or per project</b></li>
+          <!-- TODO: confirm which payment methods you accept -->
+          <li>Methods <b>PayPal · Wise · Robux</b></li>
+          <li>Terms <b>Agreed before work starts</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="eyebrow">// contact</div>
+    <h2>Let's build your game</h2>
+    <p class="sub">Send me a message with what you're building and what you need scripted.</p>
+    <div class="btns">
+      <button class="btn primary" id="copyDiscord" type="button">Discord: <span class="mono">xylorage</span></button>
+      <a class="btn" href="https://devforum.roblox.com/u/XyLoRage" target="_blank" rel="noopener">DevForum: XyLoRage</a>
+      <a class="btn" href="https://devforum.roblox.com/t/4946218" target="_blank" rel="noopener">DevForum portfolio post</a>
+    </div>
+    <div class="copy-note" id="copyNote"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© <span id="yr"></span> XyLo · Roblox Scripter</div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  document.getElementById('copyDiscord').addEventListener('click', async () => {
+    const note = document.getElementById('copyNote');
+    try { await navigator.clipboard.writeText('xylorage'); note.textContent = 'Copied Discord username!'; }
+    catch { note.textContent = 'Discord: xylorage'; }
+    setTimeout(() => note.textContent = '', 2500);
+  });
+</script>
+</body>
+</html>
